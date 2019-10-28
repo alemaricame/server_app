@@ -14,11 +14,12 @@ exports.users = function(req, res) {
 };
 
 exports.login = function (request, res){
+    console.log(request.body);
     var sql = 'SELECT * FROM repartidor WHERE usuarioRepartidor = ? AND passRepartidor = ?';
     connection.query(sql, [request.body.usuarioRepartidor,request.body.passRepartidor], function (err, rows,fields) {
-      if (err) throw err;
-      console.log(err);
-      response.ok(rows, res)
+         if (err) throw err;
+        console.log(err);
+        response.ok(rows, res)
     });
 }
 
@@ -40,12 +41,33 @@ exports.clientes = function (request, res){
     });
 }
 exports.citas = function (request, res){
-    connection.query('SELECT * FROM citas where idRepartidor = ?', request.body.idRepartidor ,function (error, rows, fields){
+    connection.query('SELECT a.*, b.nombreCliente FROM citas a INNER JOIN cliente b on a.idCliente = b.idCliente where a.idRepartidor = ?', request.body.idRepartidor ,function (error, rows, fields){
         if(error){
             console.log(error)
         } else{
             response.ok(rows, res);
         }
+    });
+}
+
+exports.historialventas = function (request, res){
+    //var sql = 'SELECT a.*, b.nombreCliente FROM venta a INNER JOIN cliente b on a.idCliente = b.idCliente where a.idRepartidor = ?';
+    var sql = 'SELECT idVenta FROM venta where idRepartidor = ?'
+    connection.query(sql, [request.body.idRepartidor], function (err, rows) {
+        if (err) throw err;
+        console.log(err);
+        response.ok(rows, res)
+    });
+}
+
+exports.ticketVentas = function (request, res){
+    console.log(request.body)
+    //var sql = 'SELECT a.*, b.nombreCliente FROM venta a INNER JOIN cliente b on a.idCliente = b.idCliente where a.idRepartidor = ?';
+    var sql = 'SELECT a.*, b.nombreCliente FROM venta a INNER JOIN cliente b on a.idCliente = b.idCliente where a.idVenta = ?'
+    connection.query(sql, [request.body.idVenta], function (err, rows) {
+        if (err) throw err;
+        console.log(err);
+        response.ok(rows, res)
     });
 }
 

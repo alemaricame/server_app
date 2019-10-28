@@ -23,5 +23,12 @@ module.exports = function(app) {
     
     app.route('/recuperaPass')
         .post(todoList.recuperaPass);
+    
+    app.route('/historialventas')
+        .post(todoList.historialventas);
+
+    app.route('/ticketVentas')
+        .post(todoList.ticketVentas);
+
 
 };
